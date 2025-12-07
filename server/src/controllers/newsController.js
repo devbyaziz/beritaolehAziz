@@ -1,13 +1,19 @@
 import axios from 'axios';
 
-const GNEWS_API_KEY = process.env.GNEWS_API_KEY;
 const BASE_URL = 'https://gnews.io/api/v4';
+
+// Fungsi untuk mendapatkan API Key
+const getApiKey = () => {
+  return process.env.GNEWS_API_KEY;
+};
 
 // Validasi API Key
 const validateApiKey = () => {
-  if (!GNEWS_API_KEY || GNEWS_API_KEY === 'your_api_key_here') {
+  const apiKey = getApiKey();
+  if (!apiKey || apiKey === 'your_api_key_here') {
     throw new Error('GNEWS_API_KEY belum diatur. Silakan set di file .env');
   }
+  return apiKey;
 };
 
 // Helper function to transform GNews response to match our frontend
@@ -33,14 +39,14 @@ const transformGNewsResponse = (gNewsData) => {
 // Get top headlines
 export const getTopHeadlines = async (req, res) => {
   try {
-    validateApiKey();
+    const apiKey = validateApiKey();
     const { country = 'us', max = 12 } = req.query;
 
     const response = await axios.get(`${BASE_URL}/top-headlines`, {
       params: {
         country,
         max,
-        apikey: GNEWS_API_KEY
+        apikey: apiKey
       }
     });
 
@@ -62,7 +68,7 @@ export const getTopHeadlines = async (req, res) => {
 // Get news by category
 export const getNewsByCategory = async (req, res) => {
   try {
-    validateApiKey();
+    const apiKey = validateApiKey();
     const { category } = req.params;
     const { country = 'us', max = 12 } = req.query;
 
@@ -71,7 +77,7 @@ export const getNewsByCategory = async (req, res) => {
         category,
         country,
         max,
-        apikey: GNEWS_API_KEY
+        apikey: apiKey
       }
     });
 
@@ -93,7 +99,7 @@ export const getNewsByCategory = async (req, res) => {
 // Get news by country
 export const getNewsByCountry = async (req, res) => {
   try {
-    validateApiKey();
+    const apiKey = validateApiKey();
     const { country } = req.params;
     const { max = 12 } = req.query;
 
@@ -101,7 +107,7 @@ export const getNewsByCountry = async (req, res) => {
       params: {
         country,
         max,
-        apikey: GNEWS_API_KEY
+        apikey: apiKey
       }
     });
 
@@ -123,7 +129,7 @@ export const getNewsByCountry = async (req, res) => {
 // Search news
 export const searchNews = async (req, res) => {
   try {
-    validateApiKey();
+    const apiKey = validateApiKey();
     const { q, max = 12, lang = 'en' } = req.query;
 
     if (!q) {
@@ -138,7 +144,7 @@ export const searchNews = async (req, res) => {
         q,
         max,
         lang,
-        apikey: GNEWS_API_KEY
+        apikey: apiKey
       }
     });
 
@@ -160,7 +166,7 @@ export const searchNews = async (req, res) => {
 // Get everything with multiple filters
 export const getEverything = async (req, res) => {
   try {
-    validateApiKey();
+    const apiKey = validateApiKey();
     const {
       q,
       lang = 'en',
@@ -170,7 +176,7 @@ export const getEverything = async (req, res) => {
 
     const params = {
       max,
-      apikey: GNEWS_API_KEY
+      apikey: apiKey
     };
 
     if (q) params.q = q;

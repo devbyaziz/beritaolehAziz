@@ -39,6 +39,9 @@ Thumbs.db
 *.swo
 *.sw?
 
+# AI Assistant
+.claude/
+
 # Build files
 dist/
 build/
